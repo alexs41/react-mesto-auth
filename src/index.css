@@ -1,0 +1,55 @@
+@import url(./vendor/normalize.css);
+@import url(./fonts/fonts.css);
+@import url(./blocks/root/root.css);
+
+@import url(./blocks/header/header.css);
+@import url(./blocks/header/__logo/header__logo.css);
+
+@import url(./blocks/profile/profile.css);
+@import url(./blocks/profile/__add-button/profile__add-button.css);
+
+@import url(./blocks/profile-info/profile-info.css);
+@import url(./blocks/profile-info/__avatar/profile-info__avatar.css);
+
+@import url(./blocks/profile-text-info/profile-text-info.css);
+@import url(./blocks/profile-text-info/__full-name/profile-text-info__full-name.css);
+@import url(./blocks/profile-text-info/__description/profile-text-info__description.css);
+
+
+@import url(./blocks/profile-info-container/profile-info-container.css);
+@import url(./blocks/profile-info-container/__edit-button/profile-info-container__edit-button.css);
+
+@import url(./blocks/elements/elements.css);
+@import url(./blocks/element/element.css);
+@import url(./blocks/element/__header/element__header.css);
+@import url(./blocks/element/__image/element__image.css);
+
+@import url(./blocks/like-container/like-container.css);
+@import url(./blocks/like-container/__like-button/like-container__like-button.css);
+@import url(./blocks/like-container/__like-button/_active/like-container__like-button_active.css);
+@import url(./blocks/like-container/__like-count/like-container__like-count.css);
+
+@import url(./blocks/element/__trash-button/element__trash-button.css);
+
+@import url(./blocks/footer/footer.css);
+@import url(./blocks/footer/__copyright/footer__copyright.css);
+
+@import url(./blocks/popup/popup.css);
+@import url(./blocks/popup/_opened/popup_opened.css);
+@import url(./blocks/popup/__close-button/popup__close-button.css);
+@import url(./blocks/popup/_element-image/popup_element-image.css);
+
+@import url(./blocks/form/form.css);
+@import url(./blocks/form/_confirm-delete/form_confirm-delete.css);
+@import url(./blocks/form/__header/form__header.css);
+@import url(./blocks/form/__submit-button/form__submit-button.css);
+@import url(./blocks/form/__submit-button/_inactive/form__submit-button_inactive.css);
+
+@import url(./blocks/form/__input/form__input.css);
+
+@import url(./blocks/figure/figure.css);
+@import url(./blocks/figure/__caption/figure__caption.css);
+@import url(./blocks/figure/__image/figure__image.css);
+
+@import url(./blocks/form/__input/_type_error/form__input_type_error.css);
+@import url(./blocks/form/__input-error/form__input-error.css);
