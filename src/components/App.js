@@ -1,5 +1,7 @@
-import logo from './logo.svg';
-import './index.css';
+import '../index.css';
+import Header from './Header.js';
+import Main from './Main.js';
+import Footer from './Footer.js';
 
 function App() {
   return (
@@ -12,31 +14,9 @@ function App() {
       </head>
       <body>
           <div className="root">
-              <header className="header">
-                  <div className="header__logo"></div>
-              </header>
-              <main className="content">
-                  <section className="profile">
-                      
-                      <div className="profile-info">
-                          <div className="profile-info__avatar">
-                          </div>
-                          <div className="profile-info-container">
-                              <div className="profile-text-info">
-                                  <h3 className="profile-text-info__full-name"></h3>
-                                  <p className="profile-text-info__description"></p>
-                              </div>
-                              <button className="profile-info-container__edit-button" type="button"></button>
-                          </div>
-                          
-                      </div>
-                      <button className="profile__add-button" type="button"></button>
-                  </section>
-                  <section className="elements"></section>
-              </main>
-              <footer className="footer">
-                  <p className="footer__copyright">© 2020 Mesto Russia</p>
-              </footer>
+              <Header />
+              <Main />
+              <Footer />
               <div className="popup popup_edit-profile">
                   <div className="popup__container">
                       <form className="form form_edit-profile" novalidate>
