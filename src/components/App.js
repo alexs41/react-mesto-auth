@@ -3,6 +3,7 @@ import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
+import PopupWithForm from './PopupWithForm.js';
 
 import React, { useState } from 'react';
 
@@ -13,8 +14,6 @@ function App() {
 
     const handleEditAvatarClick = () => {
         setEditAvatarPopupState(true);
-        // const popupEditAvatar = document.querySelector('.popup_edit-avatar');
-        // popupEditAvatar.classList.add('popup_opened');
     };
     const classNamePopupEditAvatar = `popup popup_edit-avatar ${isEditAvatarPopupOpen ? 'popup_opened' : ''}`;
     const classNamePopupEditProfile = `popup popup_edit-profile ${isEditProfilePopupOpen ? 'popup_opened' : ''}`;
@@ -32,7 +31,11 @@ function App() {
         // const popupAddPlace = document.querySelector('.popup_add-element');
         // popupAddPlace.classList.add('popup_opened');
     }
-    
+    const closeAllPopups = () => {
+        setEditAvatarPopupState(false);
+        setEditProfilePopupState(false);
+        setAddPlacePopupState(false);
+    }
 
     return (
         <div className="App">
@@ -47,8 +50,17 @@ function App() {
                     <Header />
                     <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} />
                     <Footer />
+                    <PopupWithForm title='Обновить аватар' name='editAvatar' isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} children={
+                        <>
+                            <input id="avatar-link-input" type="url" name="avatar" className="form__input form__input_avatar-link" placeholder="Ссылка на новый аватар" required />
+                            <span className="avatar-link-input-error form__input-error"></span>
+                        </>
+                    } />
+                    {/* <PopupWithForm title='Редактировать профиль' name='editProfile' children={} />
+                    <PopupWithForm title='Новое место' name='addPlace' children={} /> */}
+
                     {/* <ImagePopup /> */}
-                    <div className={classNamePopupEditProfile}>
+                    {/* <div className={classNamePopupEditProfile}>
                         <div className="popup__container">
                             <form className="form form_edit-profile" novalidate>
                                 <h3 className="form__header">Редактировать профиль</h3>
@@ -108,7 +120,7 @@ function App() {
                                 <button className="popup__close-button" type="button"></button>
                             </form>
                         </div>
-                    </div>
+                    </div> */}
 
                     <template className="element_template" id="element_template">
                         <div className="element">

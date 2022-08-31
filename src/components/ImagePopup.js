@@ -6,7 +6,13 @@ export default function ImagePopup()  {
     const popup = document.querySelector('.popup_element-image');
     const _figureImage = popup.querySelector('.figure__image');
     const _figureCaption = popup.querySelector('.figure__caption');
-    
+
+    // function _handleEscClose = (e) => {
+    //     if (e.key === 'Escape') {
+    //         close();
+    //     }
+    // }
+
     function open() {
         popup.classList.add('popup_opened');
         // document.addEventListener('keydown', _handleEscClose);
@@ -16,11 +22,6 @@ export default function ImagePopup()  {
         // document.removeEventListener('keydown', _handleEscClose);
     }
 
-    // function _handleEscClose = (e) => {
-    //     if (e.key === 'Escape') {
-    //         close();
-    //     }
-    // }
     return (
         <div className="popup popup_element-image">
             <div className="popup__container">
