@@ -1,38 +1,42 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 
-export default function ImagePopup()  {
-    const [opened, setOpened] = useState(false);
-
-    const popup = document.querySelector('.popup_element-image');
-    const _figureImage = popup.querySelector('.figure__image');
-    const _figureCaption = popup.querySelector('.figure__caption');
-
-    // function _handleEscClose = (e) => {
-    //     if (e.key === 'Escape') {
-    //         close();
-    //     }
-    // }
-
-    function open() {
-        popup.classList.add('popup_opened');
-        // document.addEventListener('keydown', _handleEscClose);
+export default function ImagePopup(props)  {
+    const { card, onClose, isOpen } = props;
+    // debugger;
+    function _handleEscClose(e) {
+        if (e.key === 'Escape') {
+            onClose();
+        }
     }
-    function close() {
-        popup.classList.remove('popup_opened');
-        // document.removeEventListener('keydown', _handleEscClose);
-    }
+    useEffect(() => {
+        document.addEventListener("keydown", _handleEscClose);
+        return () => {
+          document.removeEventListener("keydown", _handleEscClose);
+        };
+      });
 
-    return (
-        <div className="popup popup_element-image">
-            <div className="popup__container">
-                <figure className="figure">
-                    <img className="figure__image" />
-                    <figcaption className="figure__caption">Подпись к фото</figcaption>
-                    <button className="popup__close-button" type="button"></button>
-                </figure>
-            </div>
-        </div>
-    );
+    // debugger;
+    
+    if (card) {
+            // debugger;
+            return (
+            <div className={`popup popup_element-image ${isOpen ? 'popup_opened' : ''}`} onClick={
+                (evt) => { 
+                    if (evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-button')) { 
+                        onClose(); 
+                    };
+                  }
+            }>
+                <div className="popup__container">
+                    <figure className="figure">
+                        
+                        <img className="figure__image" src={card.link} alt={card.name}/>
+                        <figcaption className="figure__caption">{card.name}</figcaption>
+                        <button className="popup__close-button" type="button" onClick={onClose}></button>
+                    </figure>
+                </div>
+            </div>)
+        }
 }
 
 //   constructor( popupSelector ) {

@@ -1,18 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
 export default function PopupWithForm(props)  {
-    const [opened, setOpened] = useState(false);
-
-    const popup = document.querySelector('.popup_element-image');
-    
-    // function open() {
-    //     popup.classList.add('popup_opened');
-    //     // document.addEventListener('keydown', _handleEscClose);
-    // }
-    function close() {
-        popup.classList.remove('popup_opened');
-        // document.removeEventListener('keydown', _handleEscClose);
-    }
 
     function _handleEscClose(e) {
         if (e.key === 'Escape') {
@@ -35,11 +23,10 @@ export default function PopupWithForm(props)  {
                 };
               }
         }>
-            <div class="popup__container">
-                <form class="form" name={props.name}>
-                    <h3 class="form__header">{props.title}</h3>
+            <div className="popup__container">
+                <form className="form" name={props.name}>
+                    <h3 className="form__header">{props.title}</h3>
                     {props.children}
-                    <button className="form__submit-button" type="submit">Сохранить</button>
                     <button className="popup__close-button" type="button" onClick={props.onClose}></button>
                 </form>
             </div>
