@@ -15,9 +15,6 @@
         margin: 0 auto;
     }
 }
-/* .profile-info__avatar:hover {
-    opacity: 0.2;
-} */
 
 .profile-info__avatar:hover::after {
     position: absolute;
@@ -30,4 +27,5 @@
     background-image: url('../../../images/edit-icon-avatar.svg');
     background-color: rgba(0, 0, 0, .8);
     content: "";
+    cursor: pointer;
 }

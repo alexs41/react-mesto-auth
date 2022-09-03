@@ -28,7 +28,7 @@ export default function Main(props) {
                 setCardsArray(initialCards);
             })
             .catch(err => console.error('Произошла ошибка!', err));
-    }, [userName, userDescription, userAvatar, cardsArray]);
+    }, []);
 
     return (
         <main className="content">
