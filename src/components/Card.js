@@ -2,10 +2,8 @@
 export default function Card(props) {
     const { card,  cardClickCallback } = props;
     function handleClick() {
-        debugger;
         cardClickCallback(card);
       }
-    // debugger;
     return (
         <div className="element" id={card.id}>
             

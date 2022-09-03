@@ -20,13 +20,6 @@ export default function Main(props) {
             .catch(err => console.error('Произошла ошибка!', err));
     });
 
-    // function createCard(card) {
-    //     return new Card(card, templateSelector, handleCardClick, user, api, popupConfirmDelete).render();
-    // }
-    // let initialCards = [];
-    // let cardsList = undefined;
-    // let result = undefined;
-
     useEffect(() => {
         (async () => {
             try {
@@ -39,27 +32,7 @@ export default function Main(props) {
                     likes: card.likes,
                 }));
                 initialCards = initialCards.reverse();
-                // debugger;
                 setCardsArray(initialCards);
-                // debugger;
-                // setCards(['test1', 'test2']);
-                // console.log(result);
-                // debugger;
-                // initialCardsObj = initialCards.map( card => {
-                // return createCard(card);
-                // });
-                // initialCardsObj = initialCardsObj.reverse();
-                // cardsList = new Section({
-                //     items: initialCardsObj,
-                //     renderer: (item) => {
-                //     cardsList.addItem(item);
-                //     },
-                // },
-                // '.elements'
-                // );
-                // cardsList.renderItems();
-                    
-            
             } catch(err) {
                 console.error('Произошла ошибка!', err);
             }
@@ -77,7 +50,6 @@ export default function Main(props) {
                             <h3 className="profile-text-info__full-name">{userName}</h3>
                             <p className="profile-text-info__description">{userDescription}</p>
                         </div>
-                        
                         <button className="profile-info-container__edit-button" type="button" onClick={() => props.onEditProfile()}></button>
                     </div>
                 </div>
@@ -87,9 +59,7 @@ export default function Main(props) {
             { cardsArray ? (
                 <section className="elements">
                     {cardsArray.map(card => {
-                        // debugger;
                         return <Card key={card.id} cardClickCallback={props.onCardClick} card={card}/>;
-                        // debugger;
                     }
                     )}
                 </section>
