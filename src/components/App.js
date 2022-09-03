@@ -69,7 +69,7 @@ export default function App() {
                         <button className="form__submit-button form__submit-button_confirm" type="submit">Да</button>
                     </>
                 } />
-                <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen}/>
+                <ImagePopup name='imagePopup' card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen}/>
             </div>
         </div>
     );
