@@ -30,6 +30,8 @@
 @import url(./blocks/like-container/__like-count/like-container__like-count.css);
 
 @import url(./blocks/element/__trash-button/element__trash-button.css);
+@import url(./blocks/element/__trash-button/_hidden/element__trash-button_hidden.css);
+@import url(./blocks/element/__trash-button/_visible/element__trash-button_visible.css);
 
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__copyright/footer__copyright.css);
