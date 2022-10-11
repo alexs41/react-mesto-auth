@@ -4,6 +4,7 @@ import Main from './Main.js';
 import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
 import PopupWithForm from './PopupWithForm.js';
+import EditProfilePopup from './EditProfilePopup.js';
 import { api } from '../utils/Api.js';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -44,6 +45,18 @@ export default function App() {
         }
     }
 
+    function handleUpdateUser(user) {
+        Promise.all([api.editUser(user)])
+            .then(([userData]) => {
+                // тут установка данных пользователя
+                setCurrentUser(user);
+            })
+            .catch(err => console.error('Произошла ошибка!', err));
+        // api.editUser(user);
+        // setCurrentUser(user);
+        closeAllPopups();
+    }
+
     useEffect(() => {
         Promise.all([api.getUser()])
             .then(([userData]) => {
@@ -67,7 +80,7 @@ export default function App() {
                             <button className="form__submit-button form__submit-button_edit-avatar" type="submit">Сохранить</button>
                         </>
                     } />
-                    <PopupWithForm title='Редактировать профиль' name='editProfile' isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
+                    {/* <PopupWithForm title='Редактировать профиль' name='editProfile' isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
                         <>
                             <input id="full-name-input" type="text" name="name" className="form__input form__input_full-name" placeholder="Имя" required minLength="2" maxLength="40" />
                             <span className="full-name-input-error form__input-error"></span>
@@ -75,7 +88,9 @@ export default function App() {
                             <span className="description-input-error form__input-error"></span>
                             <button className="form__submit-button form__submit-button_edit-profile" type="submit">Сохранить</button>
                         </>
-                    } />
+                    } /> */}
+                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+
                     <PopupWithForm title='Новое место' name='addPlace' isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
                         <>
                             <input id="element-name-input" type="text" name="name" className="form__input form__input_element-name" placeholder="Название" required minLength="2" maxLength="40" />

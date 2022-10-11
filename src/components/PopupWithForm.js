@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 
 export default function PopupWithForm(props)  {
-    const { title, name, isOpen, onClose, onEscClose, children } = props;
+    const { title, name, isOpen, onClose, onEscClose, children, onSubmit } = props;
     
     
     useEffect(() => {
@@ -20,7 +20,7 @@ export default function PopupWithForm(props)  {
               }
         }>
             <div className="popup__container">
-                <form className="form" name={name}>
+                <form className="form" name={name} onSubmit={onSubmit}>
                     <h3 className="form__header">{title}</h3>
                     {children}
                     <button className="popup__close-button" type="button" onClick={onClose}></button>

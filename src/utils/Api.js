@@ -44,8 +44,8 @@ class Api {
             })
             .then(this._checkResponse);
     }
-    deleteCard = (cardId) => {
-        return fetch(`${this._url}/cards/${cardId}`, {
+    deleteCard = (card) => {
+        return fetch(`${this._url}/cards/${card._id}`, {
                 method: 'DELETE',
                 headers: this._headers,
             })
@@ -65,6 +65,7 @@ class Api {
             })
             .then(this._checkResponse);
     }
+
     editAvatar = (user) => {
         return fetch(`${this._url}/users/me/avatar`, {
                 method: 'PATCH',
