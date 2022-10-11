@@ -5,6 +5,7 @@ import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
 import PopupWithForm from './PopupWithForm.js';
 import EditProfilePopup from './EditProfilePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
 import { api } from '../utils/Api.js';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -20,6 +21,7 @@ export default function App() {
     const [selectedCard, setSelectedCard] = useState(null);
 
     const [currentUser, setCurrentUser] = useState('test'); // новый стейт
+    const [avatarLink, setAvatarLink] = useState('test'); // новый стейт
 
     const handleEditAvatarClick = () => setEditAvatarPopupState(true);
     const handleEditProfileClick = () => setEditProfilePopupState(true);
@@ -49,14 +51,22 @@ export default function App() {
         Promise.all([api.editUser(user)])
             .then(([userData]) => {
                 // тут установка данных пользователя
+                setAvatarLink(user.avatar);
+            })
+            .catch(err => console.error('Произошла ошибка!', err));
+        
+        closeAllPopups();
+    }
+    function handleUpdateAvatar(user) {
+        
+        Promise.all([api.editAvatar(user)])
+            .then(([userData]) => {
+                // тут установка аватара
                 setCurrentUser(user);
             })
             .catch(err => console.error('Произошла ошибка!', err));
-        // api.editUser(user);
-        // setCurrentUser(user);
         closeAllPopups();
     }
-
     useEffect(() => {
         Promise.all([api.getUser()])
             .then(([userData]) => {
@@ -73,13 +83,14 @@ export default function App() {
                     <Header />
                     <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} />
                     <Footer />
-                    <PopupWithForm title='Обновить аватар' name='editAvatar' isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
+                    {/* <PopupWithForm title='Обновить аватар' name='editAvatar' isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
                         <>
                             <input id="avatar-link-input" type="url" name="avatar" className="form__input form__input_avatar-link" placeholder="Ссылка на новый аватар" required />
                             <span className="avatar-link-input-error form__input-error"></span>
                             <button className="form__submit-button form__submit-button_edit-avatar" type="submit">Сохранить</button>
                         </>
-                    } />
+                    } /> */}
+                    <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
                     {/* <PopupWithForm title='Редактировать профиль' name='editProfile' isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
                         <>
                             <input id="full-name-input" type="text" name="name" className="form__input form__input_full-name" placeholder="Имя" required minLength="2" maxLength="40" />
