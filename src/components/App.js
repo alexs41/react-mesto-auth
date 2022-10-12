@@ -22,7 +22,6 @@ export default function App() {
     const [selectedCard, setSelectedCard] = useState(null);
 
     const [currentUser, setCurrentUser] = useState(''); // новый стейт
-    // const [avatarLink, setAvatarLink] = useState(''); // новый стейт
 
     const handleEditAvatarClick = () => setEditAvatarPopupState(true);
     const handleEditProfileClick = () => setEditProfilePopupState(true);
@@ -59,25 +58,26 @@ export default function App() {
                         _id: card.owner._id,
                     }, 
                 }));
-                // initialCards = initialCards.reverse();
                 setCardsArray(initialCards);
             })
             .catch(err => console.error('Произошла ошибка!', err));
     }, []);
 
-    function handleCardLike(card) {
+    async function handleCardLike(card) {
         // Снова проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some(i => i._id === currentUser._id);
         // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card, isLiked).then((newCard) => {
-            // setCardsArray((state) => state.map((c) => c._id === card.id ? newCard : c));
-            setCardsArray((state) => state.map((c) => c._id === card._id ? c : newCard ));    
-        
-        });
+        try {
+            const newCard = await api.changeLikeCardStatus(card, isLiked);
+            setCardsArray((state) => state.map((c) => c._id === card._id ? newCard : c));
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
     }
 
-    function handleCardDelete (card) {
-        api.deleteCard(card);
+    async function handleCardDelete (card) {
+        await api.deleteCard(card);
+        setCardsArray(cardsArray.filter(item => item._id !==card._id));
     }
     //---------------------------------- перенос из MAIN -------
     function handleEscClose(e) {
@@ -102,7 +102,6 @@ export default function App() {
             .then(([userData]) => {
                 // тут установка аватара
                 setCurrentUser(user);
-                // setAvatarLink(user.avatar);
             })
             .catch(err => console.error('Произошла ошибка!', err));
         closeAllPopups();
@@ -113,7 +112,6 @@ export default function App() {
             .then(([newCard]) => {
                 // добавление новой карточки в массив
                 setCardsArray([newCard, ...cardsArray]);
-                // setAvatarLink(user.avatar);
             })
             .catch(err => console.error('Произошла ошибка!', err));
         closeAllPopups();
@@ -135,34 +133,11 @@ export default function App() {
                     <Header />
                     <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
                     <Footer />
-                    {/* <PopupWithForm title='Обновить аватар' name='editAvatar' isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
-                        <>
-                            <input id="avatar-link-input" type="url" name="avatar" className="form__input form__input_avatar-link" placeholder="Ссылка на новый аватар" required />
-                            <span className="avatar-link-input-error form__input-error"></span>
-                            <button className="form__submit-button form__submit-button_edit-avatar" type="submit">Сохранить</button>
-                        </>
-                    } /> */}
+
                     <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} onUpdateAvatar={handleUpdateAvatar} />
-                    {/* <PopupWithForm title='Редактировать профиль' name='editProfile' isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
-                        <>
-                            <input id="full-name-input" type="text" name="name" className="form__input form__input_full-name" placeholder="Имя" required minLength="2" maxLength="40" />
-                            <span className="full-name-input-error form__input-error"></span>
-                            <input id="description-input" type="text" name="about" className="form__input form__input_description" placeholder="Профессия" required minLength="2" maxLength="200" />
-                            <span className="description-input-error form__input-error"></span>
-                            <button className="form__submit-button form__submit-button_edit-profile" type="submit">Сохранить</button>
-                        </>
-                    } /> */}
                     <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} onUpdateUser={handleUpdateUser} />
                     <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} onAddPlace={handleAddPlaceSubmit} />
-                    {/* <PopupWithForm title='Новое место' name='addPlace' isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} children={
-                        <>
-                            <input id="element-name-input" type="text" name="name" className="form__input form__input_element-name" placeholder="Название" required minLength="2" maxLength="40" />
-                            <span className="element-name-input-error form__input-error"></span>
-                            <input id="picture-link-input" type="url" name="link" className="form__input form__input_picture-link" placeholder="Ссылка на картинку" required />
-                            <span className="picture-link-input-error form__input-error"></span>
-                            <button className="form__submit-button form__submit-button_add-element" type="submit">Создать</button>
-                        </>
-                    } /> */}
+                    
                     <PopupWithForm title='Вы уверены?' name='confirm' /*isOpen={}*/ onClose={closeAllPopups} onEscClose={handleEscClose} children={
                         <>
                             <button className="form__submit-button form__submit-button_confirm" type="submit">Да</button>

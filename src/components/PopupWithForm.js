@@ -3,7 +3,6 @@ import React, {useEffect} from 'react';
 export default function PopupWithForm(props)  {
     const { title, name, isOpen, onClose, onEscClose, children, onSubmit } = props;
     
-    
     useEffect(() => {
         if (isOpen === true) {
             document.addEventListener("keydown", onEscClose);

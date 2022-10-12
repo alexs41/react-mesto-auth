@@ -66,7 +66,7 @@ class Api {
             .then(this._checkResponse);
     }
     changeLikeCardStatus = (card, isLiked) => {
-        (isLiked ? this.disLikeCard(card) : this.likeCard(card))
+        return (isLiked ? this.disLikeCard(card) : this.likeCard(card));
     }
 
     editAvatar = (user) => {

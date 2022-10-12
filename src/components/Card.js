@@ -40,7 +40,6 @@ export default function Card(props) {
                 <button className={cardLikeButtonClassName} type="button" onClick={() => handleLikeClick()}></button> 
                 <p className="like-container__like-count">{card.likes.length}</p>
             </div>
-            {/* <button className="element__trash-button" type="button"></button> */}
             <button className={cardDeleteButtonClassName} type="button" onClick={() => handleDeleteClick()}></button>
         </div>
     );
