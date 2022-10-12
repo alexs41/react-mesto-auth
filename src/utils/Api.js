@@ -45,21 +45,21 @@ class Api {
             .then(this._checkResponse);
     }
     deleteCard = (card) => {
-        return fetch(`${this._url}/cards/${card.id}`, {
+        return fetch(`${this._url}/cards/${card._id}`, {
                 method: 'DELETE',
                 headers: this._headers,
             })
             .then(this._checkResponse);
     }
     likeCard = (card) => {
-        return fetch(`${this._url}/cards/${card.id}/likes`, {
+        return fetch(`${this._url}/cards/${card._id}/likes`, {
                 method: 'PUT',
                 headers: this._headers,
                 })
                 .then(this._checkResponse);
     }
     disLikeCard = (card) => {
-        return fetch(`${this._url}/cards/${card.id}/likes`, {
+        return fetch(`${this._url}/cards/${card._id}/likes`, {
                 method: 'DELETE',
                 headers: this._headers,
             })

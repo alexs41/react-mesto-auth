@@ -4,30 +4,30 @@ import Card from './Card.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export default function Main(props) {
-    const [cardsArray, setCardsArray] = useState([]);
+    // const [cardsArray, setCardsArray] = useState([]);
     // const [card, setCard] = useState();
-
+    
+    const { cardsArray, onCardLike, onCardDelete } = props;
     const currentUser = React.useContext(CurrentUserContext);
-    // debugger;
-    useEffect(() => {
-        Promise.all([api.getInitialCards()])
-            .then(([initialCards]) => {
-                // и тут отрисовка карточек
-                initialCards = initialCards.map((card) => ({
-                    link: card.link,
-                    alt: card.name,
-                    name: card.name,
-                    id: card._id,
-                    likes: card.likes,
-                    owner: {
-                        _id: card.owner._id,
-                    }, 
-                }));
-                initialCards = initialCards.reverse();
-                setCardsArray(initialCards);
-            })
-            .catch(err => console.error('Произошла ошибка!', err));
-    }, []);
+    // useEffect(() => {
+    //     Promise.all([api.getInitialCards()])
+    //         .then(([initialCards]) => {
+    //             // и тут отрисовка карточек
+    //             initialCards = initialCards.map((card) => ({
+    //                 link: card.link,
+    //                 alt: card.name,
+    //                 name: card.name,
+    //                 _id: card._id,
+    //                 likes: card.likes,
+    //                 owner: {
+    //                     _id: card.owner._id,
+    //                 }, 
+    //             }));
+    //             // initialCards = initialCards.reverse();
+    //             setCardsArray(initialCards);
+    //         })
+    //         .catch(err => console.error('Произошла ошибка!', err));
+    // }, []);
 
     // useEffect(() => {
     //     Promise.all([api.getUser(), api.getInitialCards()])
@@ -58,21 +58,20 @@ export default function Main(props) {
     //     });
     // }
 
-    function handleCardLike(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
-        debugger;
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card, isLiked).then((newCard) => {
-            // setCardsArray((state) => state.map((c) => c._id === card.id ? newCard : c));
-            setCardsArray((state) => state.map((c) => c._id === card.id ? c : newCard ));    
+    // function handleCardLike(card) {
+    //     // Снова проверяем, есть ли уже лайк на этой карточке
+    //     const isLiked = card.likes.some(i => i._id === currentUser._id);
+    //     // Отправляем запрос в API и получаем обновлённые данные карточки
+    //     api.changeLikeCardStatus(card, isLiked).then((newCard) => {
+    //         // setCardsArray((state) => state.map((c) => c._id === card.id ? newCard : c));
+    //         setCardsArray((state) => state.map((c) => c._id === card._id ? c : newCard ));    
         
-        });
-    }
+    //     });
+    // }
 
-    function handleCardDelete (card) {
-        api.deleteCard(card);
-    }
+    // function handleCardDelete (card) {
+    //     api.deleteCard(card);
+    // }
     return (
         <main className="content">
             <section className="profile">
@@ -93,7 +92,7 @@ export default function Main(props) {
             { cardsArray ? (
                 <section className="elements">
                     {cardsArray.map(card => {
-                        return <Card key={card.id} cardClickCallback={props.onCardClick} card={card} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />;
+                        return <Card key={card._id} cardClickCallback={props.onCardClick} card={card} onCardLike={onCardLike} onCardDelete={onCardDelete} />;
                     }
                     )}
                 </section>

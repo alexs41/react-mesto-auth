@@ -32,7 +32,7 @@ export default function Card(props) {
     }
 
     return (
-        <div className="element" id={card.id}>
+        <div className="element" id={card._id}>
             
             <img src={card.link} alt={card.name} className="element__image" onClick={() => handleClick()}/>
             <h4 className="element__header">{card.name}</h4>

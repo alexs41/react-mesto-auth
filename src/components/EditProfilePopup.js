@@ -4,7 +4,6 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export default function EditProfilePopup (props) {
     const {isOpen, onClose, onEscClose, onUpdateUser } = props;
-
     // Подписка на контекст
     const currentUser = React.useContext(CurrentUserContext);
 
