@@ -2,7 +2,7 @@ import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export default function Card(props) {
-    const { card,  cardClickCallback } = props;
+    const { card,  cardClickCallback, onCardLike, onCardDelete } = props;
     const currentUser = React.useContext(CurrentUserContext);
 
     // Определяем, являемся ли мы владельцем текущей карточки
@@ -23,17 +23,25 @@ export default function Card(props) {
         cardClickCallback(card);
       }
 
+    function handleLikeClick() {
+        onCardLike(card);
+    }
+
+    function handleDeleteClick() {
+        onCardDelete(card);
+    }
+
     return (
         <div className="element" id={card.id}>
             
             <img src={card.link} alt={card.name} className="element__image" onClick={() => handleClick()}/>
             <h4 className="element__header">{card.name}</h4>
             <div className="like-container">
-                <button className={cardLikeButtonClassName} type="button"></button> 
+                <button className={cardLikeButtonClassName} type="button" onClick={() => handleLikeClick()}></button> 
                 <p className="like-container__like-count">{card.likes.length}</p>
             </div>
             {/* <button className="element__trash-button" type="button"></button> */}
-            <button className={cardDeleteButtonClassName} type="button"></button>
+            <button className={cardDeleteButtonClassName} type="button" onClick={() => handleDeleteClick()}></button>
         </div>
     );
   }

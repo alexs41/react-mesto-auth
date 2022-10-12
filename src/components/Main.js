@@ -5,7 +5,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export default function Main(props) {
     const [cardsArray, setCardsArray] = useState([]);
-    
+    // const [card, setCard] = useState();
+
     const currentUser = React.useContext(CurrentUserContext);
     // debugger;
     useEffect(() => {
@@ -56,6 +57,19 @@ export default function Main(props) {
     //         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
     //     });
     // }
+
+    function handleCardLike(card) {
+        // Снова проверяем, есть ли уже лайк на этой карточке
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        debugger;
+        // Отправляем запрос в API и получаем обновлённые данные карточки
+        api.changeLikeCardStatus(card, isLiked).then((newCard) => {
+            // setCardsArray((state) => state.map((c) => c._id === card.id ? newCard : c));
+            setCardsArray((state) => state.map((c) => c._id === card.id ? c : newCard ));    
+        
+        });
+    }
+
     function handleCardDelete (card) {
         api.deleteCard(card);
     }
@@ -79,7 +93,7 @@ export default function Main(props) {
             { cardsArray ? (
                 <section className="elements">
                     {cardsArray.map(card => {
-                        return <Card key={card.id} cardClickCallback={props.onCardClick} card={card} />;
+                        return <Card key={card.id} cardClickCallback={props.onCardClick} card={card} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />;
                     }
                     )}
                 </section>
