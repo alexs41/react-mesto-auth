@@ -15,16 +15,14 @@ export default function EditProfilePopup (props) {
     React.useEffect(() => {
         setName(currentUser.name);
         setDescription(currentUser.about);
-    }, [currentUser]); 
+    }, [currentUser, isOpen]);
 
     // Обработчик изменения инпута обновляет стейт
     function handleChangeName(e) {
         setName(e.target.value);
-        // console.log(`name: ${name}`);
     }
     function handleChangeDescription(e) {
         setDescription(e.target.value);
-        // console.log(`description: ${description}`);
     }
 
     function handleSubmit(e) {

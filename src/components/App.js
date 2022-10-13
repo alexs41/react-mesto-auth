@@ -1,4 +1,3 @@
-import '../index.css';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -7,7 +6,7 @@ import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { api } from '../utils/Api';
+import { api } from '../utils/api';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -18,10 +17,8 @@ export default function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupState] = useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupState] = useState(false);
     const [isImagePopupOpen, setImagePopupState] = useState(false);
-
     const [selectedCard, setSelectedCard] = useState(null);
-
-    const [currentUser, setCurrentUser] = useState(''); // новый стейт
+    const [currentUser, setCurrentUser] = useState({});
 
     const handleEditAvatarClick = () => setEditAvatarPopupState(true);
     const handleEditProfileClick = () => setEditProfilePopupState(true);
@@ -40,27 +37,28 @@ export default function App() {
         setImagePopupState(false);
         setSelectedCard(null);
     }
-    //---------------------------------- перенос из MAIN -------
+    
     const [cardsArray, setCardsArray] = useState([]);
 
-
     useEffect(() => {
-        Promise.all([api.getInitialCards()])
-            .then(([initialCards]) => {
-                // и тут отрисовка карточек
+        (async () => {
+            try {
+                let initialCards = await api.getInitialCards();
                 initialCards = initialCards.map((card) => ({
-                    link: card.link,
-                    alt: card.name,
-                    name: card.name,
-                    _id: card._id,
-                    likes: card.likes,
-                    owner: {
-                        _id: card.owner._id,
-                    }, 
-                }));
-                setCardsArray(initialCards);
-            })
-            .catch(err => console.error('Произошла ошибка!', err));
+                link: card.link,
+                alt: card.name,
+                name: card.name,
+                _id: card._id,
+                likes: card.likes,
+                owner: {
+                    _id: card.owner._id,
+                }, 
+            }));
+            setCardsArray(initialCards);
+            } catch (err) {
+                console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+            }
+        })();
     }, []);
 
     async function handleCardLike(card) {
@@ -76,56 +74,61 @@ export default function App() {
     }
 
     async function handleCardDelete (card) {
-        await api.deleteCard(card);
-        setCardsArray(cardsArray.filter(item => item._id !==card._id));
+        try {
+            await api.deleteCard(card);
+            setCardsArray(cardsArray.filter(item => item._id !==card._id));
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
     }
-    //---------------------------------- перенос из MAIN -------
+    
     function handleEscClose(e) {
         if (e.key === 'Escape') {
             closeAllPopups();
         }
     }
 
-    function handleUpdateUser(user) {
-        Promise.all([api.editUser(user)])
-            .then(([userData]) => {
-                // тут установка данных пользователя
-                setCurrentUser(user);
-            })
-            .catch(err => console.error('Произошла ошибка!', err));
-        
-        closeAllPopups();
+    async function handleUpdateUser(user) {
+        try {
+            await api.editUser(user);
+            setCurrentUser(user);
+            closeAllPopups();
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
     }
 
-    function handleUpdateAvatar(user) {
-        Promise.all([api.editAvatar(user)])
-            .then(([userData]) => {
-                // тут установка аватара
-                setCurrentUser(user);
-            })
-            .catch(err => console.error('Произошла ошибка!', err));
-        closeAllPopups();
+    async function handleUpdateAvatar(user) {
+        try { 
+            await api.editAvatar(user);
+            setCurrentUser(user);
+            closeAllPopups();
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
     }
 
-    function handleAddPlaceSubmit(card) {
-        Promise.all([api.addCard(card)])
-            .then(([newCard]) => {
-                // добавление новой карточки в массив
-                setCardsArray([newCard, ...cardsArray]);
-            })
-            .catch(err => console.error('Произошла ошибка!', err));
-        closeAllPopups();
+    async function handleAddPlaceSubmit(card) {
+        try {
+            const newCard = await api.addCard(card);
+            setCardsArray([newCard, ...cardsArray]);
+            closeAllPopups();
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        } 
     }
 
     useEffect(() => {
-        Promise.all([api.getUser()])
-            .then(([userData]) => {
-                // тут установка данных пользователя
+        (async () => {
+            try {
+                const userData = await api.getUser();
                 setCurrentUser(userData);
-            })
-            .catch(err => console.error('Произошла ошибка!', err));
+            } catch (err) {
+                console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+            }
+        })();
     }, [currentUser.name, currentUser.about, currentUser.avatar]);
-
+    
     return (
         <div className="App">
             <CurrentUserContext.Provider value={currentUser}>
