@@ -2,7 +2,7 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm.js';
 
 export default function AddPlacePopup (props) {
-    const {isOpen, onClose, onEscClose, onAddPlace } = props;
+    const {isOpen, onClose, onAddPlace } = props;
 
     const cardHeaderRef = React.useRef();
     const cardLinkRef = React.useRef();
@@ -16,7 +16,7 @@ export default function AddPlacePopup (props) {
     }
 
     return (
-        <PopupWithForm title='Новое место' name='addPlace' isOpen={isOpen} onClose={onClose} onEscClose={onEscClose} onSubmit={handleSubmit} children={
+        <PopupWithForm title='Новое место' name='addPlace' isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} children={
             <>
                 <input ref={cardHeaderRef} id="element-name-input" type="text" name="name" className="form__input form__input_element-name" placeholder="Название" required minLength="2" maxLength="40" />
                 <span className="element-name-input-error form__input-error"></span>

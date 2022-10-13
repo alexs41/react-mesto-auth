@@ -81,12 +81,6 @@ export default function App() {
             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
         }
     }
-    
-    function handleEscClose(e) {
-        if (e.key === 'Escape') {
-            closeAllPopups();
-        }
-    }
 
     async function handleUpdateUser(user) {
         try {
@@ -128,7 +122,7 @@ export default function App() {
             }
         })();
     }, [currentUser.name, currentUser.about, currentUser.avatar]);
-    
+
     return (
         <div className="App">
             <CurrentUserContext.Provider value={currentUser}>
@@ -136,17 +130,16 @@ export default function App() {
                     <Header />
                     <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
                     <Footer />
-
-                    <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} onUpdateAvatar={handleUpdateAvatar} />
-                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} onUpdateUser={handleUpdateUser} />
-                    <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onEscClose={handleEscClose} onAddPlace={handleAddPlaceSubmit} />
+                    <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+                    <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
                     
-                    <PopupWithForm title='Вы уверены?' name='confirm' /*isOpen={}*/ onClose={closeAllPopups} onEscClose={handleEscClose} children={
+                    <PopupWithForm title='Вы уверены?' name='confirm' /*isOpen={}*/ onClose={closeAllPopups} children={
                         <>
                             <button className="form__submit-button form__submit-button_confirm" type="submit">Да</button>
                         </>
                     } />
-                    <ImagePopup name='imagePopup' card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} onEscClose={handleEscClose}/>
+                    <ImagePopup name='imagePopup' card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
                 </div>
             </CurrentUserContext.Provider>
         </div>

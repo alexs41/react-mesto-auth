@@ -3,7 +3,7 @@ import PopupWithForm from './PopupWithForm.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 export default function EditProfilePopup (props) {
-    const {isOpen, onClose, onEscClose, onUpdateUser } = props;
+    const {isOpen, onClose, onUpdateUser } = props;
     // Подписка на контекст
     const currentUser = React.useContext(CurrentUserContext);
 
@@ -37,7 +37,7 @@ export default function EditProfilePopup (props) {
       }
 
     return (
-        <PopupWithForm title='Редактировать профиль' name='editProfile' isOpen={isOpen} onClose={onClose} onEscClose={onEscClose} onSubmit={handleSubmit} children={
+        <PopupWithForm title='Редактировать профиль' name='editProfile' isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} children={
             <>
                 <input id="full-name-input" type="text" name="name" className="form__input form__input_full-name" placeholder="Имя" required minLength="2" maxLength="40" value={name} onChange={handleChangeName} />
                 <span className="full-name-input-error form__input-error"></span>
