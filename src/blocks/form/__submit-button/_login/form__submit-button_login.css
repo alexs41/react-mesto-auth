@@ -1,0 +1,14 @@
+.form__submit-button_login {
+    color: black;
+    background-color: white;
+}
+.form__submit-button_login:hover:enabled {
+    background-color: white;
+    opacity: 0.85;
+}
+
+@media screen and (max-width: 425px) {
+    .form__submit-button_login {
+        
+    }
+}

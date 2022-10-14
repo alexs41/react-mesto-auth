@@ -1,0 +1,10 @@
+.form__header_login {
+    color: #ffffff;
+    text-align: center;
+}
+
+@media screen and (max-width: 425px) {
+    .form__header_login {
+        
+    }
+}

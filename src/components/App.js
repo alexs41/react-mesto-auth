@@ -7,8 +7,9 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
-
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import Login from './Login';
 
 import React, { useState, useEffect } from 'react';
 
@@ -144,23 +145,37 @@ export default function App() {
 
     return (
         <div className="App">
+            <div className="root">
             <CurrentUserContext.Provider value={currentUser}>
-                <div className="root">
-                    <Header />
-                    <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
-                    <Footer />
-                    <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-                    <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
+                {/* <div className="root"> */}
+                <Switch>
+                    <Route path="/sign-in">
+                        <Header />
+                        <Login />
+                    </Route>
+                    <Route path="/sign-up">
+                        <Header />
+                    </Route>
+                    <Route path="/">
+                        <Header />
+                        <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
+                        <Footer />
+                        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+                        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+                        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
+                        
+                        <PopupWithForm title='Вы уверены?' name='confirm' /*isOpen={}*/ onClose={closeAllPopups} children={ <>
+                                <button className="form__submit-button form__submit-button_confirm" type="submit">Да</button>
+                            </>} />
+                        <ImagePopup name='imagePopup' card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
+                    </Route>
                     
-                    <PopupWithForm title='Вы уверены?' name='confirm' /*isOpen={}*/ onClose={closeAllPopups} children={
-                        <>
-                            <button className="form__submit-button form__submit-button_confirm" type="submit">Да</button>
-                        </>
-                    } />
-                    <ImagePopup name='imagePopup' card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
-                </div>
+                </Switch>
+                    
+                {/* </div> */}
             </CurrentUserContext.Provider>
+            </div>
+            
         </div>
     );
 }
