@@ -13,6 +13,8 @@ export default function AddPlacePopup (props) {
             name: cardHeaderRef.current.value,/* Значение инпута, полученное с помощью рефа */
             link: cardLinkRef.current.value,
         });
+        cardHeaderRef.current.value = '';
+        cardLinkRef.current.value = '';
     }
 
     return (

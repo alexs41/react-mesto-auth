@@ -9,6 +9,12 @@ export default function PopupWithForm(props)  {
         }
     }
 
+    function handleBlackAreaClosePopup(e) {
+        if (e.target === e.currentTarget) { 
+            onClose(); 
+        };
+    }
+
     useEffect(() => {
         if (isOpen === true) {
             document.addEventListener("keydown", handleEscClose);
@@ -17,13 +23,7 @@ export default function PopupWithForm(props)  {
     }, [isOpen, handleEscClose]);
 
     return (
-        <div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`} onClick={
-            (evt) => { 
-                if (evt.target === evt.currentTarget) { 
-                    onClose(); 
-                };
-              }
-        }>
+        <div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`} onClick={handleBlackAreaClosePopup}>
             <div className="popup__container">
                 <form className="form" name={name} onSubmit={onSubmit}>
                     <h3 className="form__header">{title}</h3>

@@ -22,7 +22,7 @@ class Api {
             headers: this._headers,
             body: JSON.stringify({
                 name: user.name,
-                about: user.about
+                about: user.about,
             })
         })
         .then(this._checkResponse);

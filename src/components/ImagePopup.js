@@ -10,6 +10,12 @@ export default function ImagePopup(props)  {
         }
     }, [isOpen, handleEscClose]);
 
+    function handleBlackAreaClosePopup(e) {
+        if (e.target === e.currentTarget) { 
+            onClose(); 
+        };
+    }
+
     function handleEscClose(e) {
         if (e.key === 'Escape') {
             onClose();
@@ -17,13 +23,7 @@ export default function ImagePopup(props)  {
     }
 
     return (
-        <div className={`popup popup_element-image ${isOpen ? 'popup_opened' : ''}`} onClick={
-            (evt) => { 
-                if (evt.target === evt.currentTarget) { 
-                    onClose(); 
-                };
-                }
-        }>
+        <div className={`popup popup_element-image ${isOpen ? 'popup_opened' : ''}`} onClick={handleBlackAreaClosePopup}>
             <div className="popup__container">
                 <figure className="figure">
                     <img className="figure__image" src={card ? card.link : null} alt={card ? card.name : null}/>

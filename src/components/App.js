@@ -40,21 +40,40 @@ export default function App() {
     
     const [cardsArray, setCardsArray] = useState([]);
 
+    async function renderInitialCards() {
+        try {
+            let initialCards = await api.getInitialCards();
+            initialCards = initialCards.map((card) => ({
+            link: card.link,
+            alt: card.name,
+            name: card.name,
+            _id: card._id,
+            likes: card.likes,
+            owner: {
+                _id: card.owner._id,
+            }, 
+        }));
+        setCardsArray(initialCards);
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
+    }
+
+    async function renderInitialUserData() {
+        try {
+            const userData = await api.getUser();
+            setCurrentUser(userData);
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
+    }
     useEffect(() => {
         (async () => {
             try {
-                let initialCards = await api.getInitialCards();
-                initialCards = initialCards.map((card) => ({
-                link: card.link,
-                alt: card.name,
-                name: card.name,
-                _id: card._id,
-                likes: card.likes,
-                owner: {
-                    _id: card.owner._id,
-                }, 
-            }));
-            setCardsArray(initialCards);
+                await Promise.all([
+                    renderInitialCards(),
+                    renderInitialUserData(),
+                ])
             } catch (err) {
                 console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
             }
@@ -84,8 +103,8 @@ export default function App() {
 
     async function handleUpdateUser(user) {
         try {
-            await api.editUser(user);
-            setCurrentUser(user);
+            const newUser = await api.editUser(user);
+            setCurrentUser(newUser);
             closeAllPopups();
         } catch (err) {
             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
@@ -94,8 +113,8 @@ export default function App() {
 
     async function handleUpdateAvatar(user) {
         try { 
-            await api.editAvatar(user);
-            setCurrentUser(user);
+            const newUser = await api.editAvatar(user);
+            setCurrentUser(newUser);
             closeAllPopups();
         } catch (err) {
             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
@@ -112,16 +131,16 @@ export default function App() {
         } 
     }
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const userData = await api.getUser();
-                setCurrentUser(userData);
-            } catch (err) {
-                console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
-            }
-        })();
-    }, [currentUser.name, currentUser.about, currentUser.avatar]);
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             const userData = await api.getUser();
+    //             setCurrentUser(userData);
+    //         } catch (err) {
+    //             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+    //         }
+    //     })();
+    // }, [currentUser.name, currentUser.about, currentUser.avatar]);
 
     return (
         <div className="App">

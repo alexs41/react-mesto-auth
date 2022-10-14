@@ -11,6 +11,7 @@ export default function EditAvatarPopup (props) {
         onUpdateAvatar({
           avatar: avatarLinkRef.current.value, /* Значение инпута, полученное с помощью рефа */
         });
+        avatarLinkRef.current.value = '';
       }
 
     return (
