@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co/';
+export const BASE_URL = 'https://auth.nomoreparties.co';
 
 function _checkResponse(res) {
     if (res.ok) {
@@ -28,13 +28,6 @@ const request = ({
   });
 }
 
-// export const register = (password, email) => {
-//   return request({
-//     url: '/signup',
-//     data: {password, email}
-//   });
-// };
-
 export const register = (password, email) => {
     return request({
       url: '/signup',
@@ -42,10 +35,10 @@ export const register = (password, email) => {
     });
   };
 
-export const authorize = (identifier, password) => {
+export const authorize = (password, email) => {
   return request({
-    url: '/auth/local',
-    data: {identifier, password}
+    url: '/signin',
+    data: {password, email}
   });
 };
 

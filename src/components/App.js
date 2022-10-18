@@ -27,7 +27,7 @@ export default function App() {
     //---------------------------------- ПР12 -----------------------------
     const [loggedIn, setLoggedIn] = useState(false);
     const [userData, setUserData] = useState({
-        username: '',
+        password: '',
         email: ''
     });
 
@@ -37,18 +37,17 @@ export default function App() {
         tokenCheck();
       }, []);
     
-    const handleLogin = (username, password) => {
-        return auth.authorize(username, password)
+    const handleLogin = (password, email) => {
+        return auth.authorize(password, email)
                 .then((data) => {
                 if (!data.jwt) throw new Error('Missing jwt');
 
                 localStorage.setItem('jwt', data.jwt);
                 setLoggedIn(true);
                 setUserData({
-                    username: data.user.username,
-                    email: data.user.email
+                    email: data.email
                 })
-                history.push('/ducks');
+                history.push('/');
             });
     };
     
@@ -185,9 +184,13 @@ export default function App() {
         } 
     }
     async function handleRegister (email, password) {
-        await auth.register(email, password);
-        history.push('/sign-in');
-        console.log(password, email);
+        try { 
+            await auth.register(email, password);
+            history.push('/sign-in');
+            console.log(password, email);
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
     };
 
     return (
@@ -197,13 +200,13 @@ export default function App() {
                 {/* <div className="root"> */}
                 <Router>
                     <Switch>
-                        <Route exact path="/sign-in">
-                            <Login />
+                        <Route path="/sign-in">
+                            <Login onLogin={handleLogin} />
                             {/* <InfoTooltip isOpen={true} /> */}
                             {/* <Login /> */}
                         </Route>
-                        <Route exact path="/sign-up">
-                            <Register onRegister2={handleRegister} />
+                        <Route path="/sign-up">
+                            <Register onRegister={handleRegister} />
                         </Route>
                         <ProtectedRoute exact path="/" loggedIn={loggedIn}>
                             <Header />

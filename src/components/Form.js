@@ -18,21 +18,17 @@ const Form = (props) => {
         });
     }
 
-    // const onRegister1 = (password, email) => {
-    //     console.log('onRegister1 ', password, email);
-    // }
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const { password, email } = state;
-        onRegister1(password, email);
-        //   .catch(err => {
-        //     console.log(err);
-        //     setState({
-        //       ...state,
-        //       message: 'Что-то пошло не так!'
-        //     })
-        //   });
+        onRegister1(password, email)
+          .catch(err => {
+            console.log(err);
+            setState({
+              ...state,
+              mexzssage: 'Что-то пошло не так!'
+            })
+          });
       }
     return (
         <div className="login">
