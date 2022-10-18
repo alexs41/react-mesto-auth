@@ -19,6 +19,7 @@ export default function InfoTooltip (props) {
                             src={successIcon}
                             alt="test"></img>
                         <h3 className="info-tool-tip__message">Вы успешно зарегистрировались!</h3>
+                        <button className="popup__close-button" type="button" onClick={onClose}></button>
                     </form>
                     
                 </>

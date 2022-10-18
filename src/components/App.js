@@ -7,10 +7,11 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
-import { BrowserRouter as Router, Route, Switch, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link, Redirect, useHistory } from "react-router-dom";
 import ProtectedRoute from './ProtectedRoute';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Login from './Login';
+import * as auth from '../auth.js';
 
 import React, { useState, useEffect } from 'react';
 import Register from './Register';
@@ -23,8 +24,55 @@ export default function App() {
     const [isImagePopupOpen, setImagePopupState] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [currentUser, setCurrentUser] = useState({});
-
+    //---------------------------------- ПР12 -----------------------------
     const [loggedIn, setLoggedIn] = useState(false);
+    const [userData, setUserData] = useState({
+        username: '',
+        email: ''
+    });
+
+    const history = useHistory();
+
+    useEffect(() => {
+        tokenCheck();
+      }, []);
+    
+    const handleLogin = (username, password) => {
+        return auth.authorize(username, password)
+                .then((data) => {
+                if (!data.jwt) throw new Error('Missing jwt');
+
+                localStorage.setItem('jwt', data.jwt);
+                setLoggedIn(true);
+                setUserData({
+                    username: data.user.username,
+                    email: data.user.email
+                })
+                history.push('/ducks');
+            });
+    };
+    
+    const handleLogout = () => {
+        localStorage.removeItem('jwt');
+        setLoggedIn(false);
+        history.push('/login');
+    }
+    
+    const tokenCheck = () => {
+        const jwt = localStorage.getItem('jwt');
+    
+        if (!jwt) return;
+    
+        auth.getContent(jwt).then((data) => {
+          setLoggedIn(true);
+          setUserData({
+            username: data.username,
+            email: data.email
+          })
+          history.push("/ducks");
+        });
+    };
+    //---------------------------------- ПР12 -----------------------------
 
     const handleEditAvatarClick = () => setEditAvatarPopupState(true);
     const handleEditProfileClick = () => setEditProfilePopupState(true);
@@ -136,6 +184,11 @@ export default function App() {
             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
         } 
     }
+    async function handleRegister (email, password) {
+        await auth.register(email, password);
+        history.push('/sign-in');
+        console.log(password, email);
+    };
 
     return (
         <div className="App">
@@ -146,11 +199,11 @@ export default function App() {
                     <Switch>
                         <Route exact path="/sign-in">
                             <Login />
-                            <InfoTooltip isOpen={true} />
+                            {/* <InfoTooltip isOpen={true} /> */}
                             {/* <Login /> */}
                         </Route>
-                        <Route exact path="/sign-up" component={Register}>
-                            {/* <Register /> */}
+                        <Route exact path="/sign-up">
+                            <Register onRegister2={handleRegister} />
                         </Route>
                         <ProtectedRoute exact path="/" loggedIn={loggedIn}>
                             <Header />
