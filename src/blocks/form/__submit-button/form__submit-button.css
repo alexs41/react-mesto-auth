@@ -1,7 +1,7 @@
 .form__submit-button {
     padding: 0;
     width: 83.25%;
-    height: 50px;
+    min-height: 50px;
     font-family: 'Inter', Arial, sans-serif;
     font-style: normal;
     font-weight: 400;

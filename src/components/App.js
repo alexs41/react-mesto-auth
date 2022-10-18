@@ -7,11 +7,14 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link, Redirect } from "react-router-dom";
+import ProtectedRoute from './ProtectedRoute';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Login from './Login';
 
 import React, { useState, useEffect } from 'react';
+import Register from './Register';
+import InfoTooltip from './InfoTooltip'
 
 export default function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupState] = useState(false);
@@ -20,6 +23,8 @@ export default function App() {
     const [isImagePopupOpen, setImagePopupState] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [currentUser, setCurrentUser] = useState({});
+
+    const [loggedIn, setLoggedIn] = useState(false);
 
     const handleEditAvatarClick = () => setEditAvatarPopupState(true);
     const handleEditProfileClick = () => setEditProfilePopupState(true);
@@ -132,46 +137,39 @@ export default function App() {
         } 
     }
 
-    // useEffect(() => {
-    //     (async () => {
-    //         try {
-    //             const userData = await api.getUser();
-    //             setCurrentUser(userData);
-    //         } catch (err) {
-    //             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
-    //         }
-    //     })();
-    // }, [currentUser.name, currentUser.about, currentUser.avatar]);
-
     return (
         <div className="App">
             <div className="root">
             <CurrentUserContext.Provider value={currentUser}>
                 {/* <div className="root"> */}
-                <Switch>
-                    <Route path="/sign-in">
-                        <Header />
-                        <Login />
-                    </Route>
-                    <Route path="/sign-up">
-                        <Header />
-                    </Route>
-                    <Route path="/">
-                        <Header />
-                        <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
-                        <Footer />
-                        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-                        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-                        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
-                        
-                        <PopupWithForm title='Вы уверены?' name='confirm' /*isOpen={}*/ onClose={closeAllPopups} children={ <>
-                                <button className="form__submit-button form__submit-button_confirm" type="submit">Да</button>
-                            </>} />
-                        <ImagePopup name='imagePopup' card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
-                    </Route>
-                    
-                </Switch>
-                    
+                <Router>
+                    <Switch>
+                        <Route exact path="/sign-in">
+                            <Login />
+                            <InfoTooltip isOpen={true} />
+                            {/* <Login /> */}
+                        </Route>
+                        <Route exact path="/sign-up" component={Register}>
+                            {/* <Register /> */}
+                        </Route>
+                        <ProtectedRoute exact path="/" loggedIn={loggedIn}>
+                            <Header />
+                            <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
+                            <Footer />
+                            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+                            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+                            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
+                            
+                            <PopupWithForm title='Вы уверены?' name='confirm' /*isOpen={}*/ onClose={closeAllPopups} children={ <>
+                                    <button className="form__submit-button form__submit-button_confirm" type="submit">Да</button>
+                                </>} />
+                            <ImagePopup name='imagePopup' card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
+                        </ProtectedRoute>
+                        <Route>
+                            {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+                        </Route>
+                    </Switch>
+                </Router>
                 {/* </div> */}
             </CurrentUserContext.Provider>
             </div>
