@@ -9,6 +9,10 @@
     display: inline-block;
 
 }
+.header__link:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
 
 @media screen and (max-width: 934px) {
     .header__link {

@@ -1,0 +1,22 @@
+.header-login-info__button {
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    /* identical to box height, or 122% */
+    color: #ffffff;
+    background-color: transparent;
+    text-align: right;
+    border: none;
+    padding: 0;
+    margin-left: 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.header-login-info__button:hover {
+    opacity: 0.6;
+    cursor: pointer;
+  }

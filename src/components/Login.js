@@ -39,9 +39,10 @@ const Login = ({ onLogin }) => {
     return (
         <>
             <Header children={
-                <div className="header__link"><Link to="/sign-up" className="link" style={{ textDecoration: 'none' }}>Регистрация</Link></div>
+                // <div className="header__link">
+                    <Link className="header__link link" to="/sign-up" style={{ textDecoration: 'none' }}>Регистрация</Link>
+                // </div>
             } />
-            {/* <Form formClassName='form_login' formHeader='Вход' sumbitButtonText='Войти' onSubmit={handleSubmit} /> */}
             <div className="login">
             {/* <CurrentUserContext.Provider value={currentUser}> */}
                 <form className="form form_login" onSubmit={handleSubmit}>
@@ -51,6 +52,7 @@ const Login = ({ onLogin }) => {
                     <input id='password' type="password" name='password' className="form__input form__input_login" placeholder="Пароль" onChange={handleChange} value={state.password} required minLength="2" maxLength="40" />
                     <span className="form__input-error"></span>
                     <button className="form__submit-button form__submit-button_login" type="submit">Войти</button>
+                    <p className='form__footnote'></p>
                 </form>
             {/* </CurrentUserContext.Provider> */}
         </div>

@@ -12,23 +12,36 @@ import ProtectedRoute from './ProtectedRoute';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Login from './Login';
 import * as auth from '../auth.js';
+import InfoTooltip from './InfoTooltip.js'
 
 import React, { useState, useEffect } from 'react';
 import Register from './Register';
-import InfoTooltip from './InfoTooltip'
+// import InfoTooltip from './InfoTooltip'
+import successIcon from '../images/success-icon.svg';
+import failIcon from '../images/fail-icon.svg'
+
 
 export default function App() {
+    const successText = 'Вы успешно зарегистрировались!';
+    const failText = 'Что-то пошло не так! Попробуйте ещё раз.';
+
     const [isEditAvatarPopupOpen, setEditAvatarPopupState] = useState(false);
     const [isEditProfilePopupOpen, setEditProfilePopupState] = useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupState] = useState(false);
     const [isImagePopupOpen, setImagePopupState] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [currentUser, setCurrentUser] = useState({});
+    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
     //---------------------------------- ПР12 -----------------------------
     const [loggedIn, setLoggedIn] = useState(false);
     const [userData, setUserData] = useState({
         password: '',
         email: ''
+    });
+
+    const [registerPopup, setRegisterPopup] = useState({
+        iconPath: '',
+        infoText: ''
     });
 
     const history = useHistory();
@@ -75,6 +88,10 @@ export default function App() {
     const handleEditAvatarClick = () => setEditAvatarPopupState(true);
     const handleEditProfileClick = () => setEditProfilePopupState(true);
     const handleAddPlaceClick = () => setAddPlacePopupState(true);
+    const infoTooltipOpen = () => {
+        debugger;
+        setIsInfoTooltipOpen(true);
+    }
 
     const handleCardClick = (card) => {
         setSelectedCard(card);
@@ -88,6 +105,8 @@ export default function App() {
 
         setImagePopupState(false);
         setSelectedCard(null);
+
+        setIsInfoTooltipOpen(false);
     }
     
     const [cardsArray, setCardsArray] = useState([]);
@@ -184,11 +203,33 @@ export default function App() {
     }
     async function handleRegister (email, password) {
         try { 
-            await auth.register(email, password);
+            debugger;
+            const data = await auth.register(email, password);
             history.push('/sign-in');
+            debugger;
+            if (data.data._id) {
+                debugger;
+                setRegisterPopup({
+                    iconPath: successIcon,
+                    infoText: successText
+                });
+            } else {
+                debugger;
+                setRegisterPopup({
+                    iconPath: failIcon,
+                    infoText: failText
+                });
+            }
             console.log(password, email);
         } catch (err) {
+            setRegisterPopup({
+                iconPath: failIcon,
+                infoText: failText
+            });
             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+            return err;
+        } finally {
+            infoTooltipOpen();
         }
     };
 
@@ -201,17 +242,15 @@ export default function App() {
                     <Switch>
                         <Route path="/sign-in">
                             <Login onLogin={handleLogin} />
-                            {/* <InfoTooltip isOpen={true} /> */}
-                            {/* <Login /> */}
                         </Route>
                         <Route path="/sign-up">
                             <Register onRegister={handleRegister} />
                         </Route>
                         <ProtectedRoute exact path="/" loggedIn={loggedIn}>
                             <Header onLogout={handleLogout} children={
-                                <div className="header__link">
-                                    <p>{userData.email}</p>
-                                    <button type="button" onClick={handleLogout} className="link" style={{ textDecoration: 'none' }}>Выйти</button>
+                                <div className="header-login-info">
+                                    <p className="header-login-info__email">{userData.email}</p>
+                                    <button className="header-login-info__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }}>Выйти</button>
                                 </div>
                             }/>
                             <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
@@ -228,7 +267,10 @@ export default function App() {
                         <Route>
                             {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
                         </Route>
+                        
+                        {/* isOpen={isInfoTooltipOpen}  */}
                     </Switch>
+                    <InfoTooltip infoTooltipOpen={infoTooltipOpen} isOpen={isInfoTooltipOpen} onClose={closeAllPopups} iconPath={registerPopup.iconPath} infoText={registerPopup.infoText} />
                 {/* </Router> */}
                 {/* </div> */}
             </CurrentUserContext.Provider>

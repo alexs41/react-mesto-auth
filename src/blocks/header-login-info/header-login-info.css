@@ -1,0 +1,11 @@
+.header-login-info {
+    display: flex;
+    flex-direction: row;
+}
+
+@media screen and (max-width: 934px) {
+    .header-login-info{
+      margin-right: 27px;
+      margin-bottom: -8px;
+    }
+  }

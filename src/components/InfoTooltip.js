@@ -6,9 +6,7 @@ import failIcon from '../images/fail-icon.svg'
 export default function InfoTooltip (props) {
     // const currentUser = React.useContext(CurrentUserContext);
     const { isOpen, onClose, iconPath, infoText } = props;
-    // form_login
-    // Вход
-    // Войти
+    
     return (
         <>
             {/* <CurrentUserContext.Provider value={currentUser}> */}
@@ -16,9 +14,9 @@ export default function InfoTooltip (props) {
                 <>
                     <form className="form info-tool-tip">
                         <img className="info-tool-tip__icon"
-                            src={successIcon}
+                            src={iconPath}
                             alt="test"></img>
-                        <h3 className="info-tool-tip__message">Вы успешно зарегистрировались!</h3>
+                        <h3 className="info-tool-tip__message">{infoText}</h3>
                         <button className="popup__close-button" type="button" onClick={onClose}></button>
                     </form>
                     
