@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import Form from './Form';
 import Header from './Header';
 // import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -37,7 +38,9 @@ const Login = ({ onLogin }) => {
 
     return (
         <>
-            <Header linkName="Регистрация" linkPath="/sign-up" />
+            <Header children={
+                <div className="header__link"><Link to="/sign-up" className="link" style={{ textDecoration: 'none' }}>Регистрация</Link></div>
+            } />
             {/* <Form formClassName='form_login' formHeader='Вход' sumbitButtonText='Войти' onSubmit={handleSubmit} /> */}
             <div className="login">
             {/* <CurrentUserContext.Provider value={currentUser}> */}
@@ -55,4 +58,4 @@ const Login = ({ onLogin }) => {
     );
 }
 
-export default Login;
+export default withRouter(Login); 

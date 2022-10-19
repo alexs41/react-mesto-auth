@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Form from './Form';
 import Header from './Header';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom';
 // import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 const Register = (props) => {
@@ -37,8 +37,11 @@ const Register = (props) => {
 
     return (
         <>
-            <Header linkName="Войти" linkPath="/sign-in" />
-            {/* <Form formClassName='form_login' formHeader='Регистрация' sumbitButtonText='Зарегистрироваться' onRegister1={onRegister2} /> */}
+            <Header children={
+                <div className="header__link">
+                    <Link to="/sign-in" className="link" style={{ textDecoration: 'none' }}>Войти</Link>
+                </div>
+            } />
             <div className="login">
             {/* <CurrentUserContext.Provider value={currentUser}> */}
                 <form className="form form_login" onSubmit={handleSubmit}>
@@ -55,4 +58,4 @@ const Register = (props) => {
         </>
     );
 }
-export default Register;
+export default withRouter(Register);

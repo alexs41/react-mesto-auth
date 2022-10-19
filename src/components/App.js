@@ -40,35 +40,34 @@ export default function App() {
     const handleLogin = (password, email) => {
         return auth.authorize(password, email)
                 .then((data) => {
-                if (!data.jwt) throw new Error('Missing jwt');
-
-                localStorage.setItem('jwt', data.jwt);
+                if (!data.token) throw new Error('Missing token');
+                localStorage.setItem('token', data.token);
+                debugger;
                 setLoggedIn(true);
                 setUserData({
-                    email: data.email
+                    email: email
                 })
-                history.push('/');
+                history.push(`/`);
             });
     };
     
     const handleLogout = () => {
-        localStorage.removeItem('jwt');
+        localStorage.removeItem('token');
         setLoggedIn(false);
-        history.push('/login');
+        history.push('/sign-in');
     }
     
     const tokenCheck = () => {
-        const jwt = localStorage.getItem('jwt');
+        const token = localStorage.getItem('token');
     
-        if (!jwt) return;
+        if (!token) return;
     
-        auth.getContent(jwt).then((data) => {
+        auth.getContent(token).then(({ data }) => {
           setLoggedIn(true);
           setUserData({
-            username: data.username,
             email: data.email
           })
-          history.push("/ducks");
+          history.push('/');
         });
     };
     //---------------------------------- ПР12 -----------------------------
@@ -198,7 +197,7 @@ export default function App() {
             <div className="root">
             <CurrentUserContext.Provider value={currentUser}>
                 {/* <div className="root"> */}
-                <Router>
+                {/* <Router> */}
                     <Switch>
                         <Route path="/sign-in">
                             <Login onLogin={handleLogin} />
@@ -209,7 +208,12 @@ export default function App() {
                             <Register onRegister={handleRegister} />
                         </Route>
                         <ProtectedRoute exact path="/" loggedIn={loggedIn}>
-                            <Header />
+                            <Header onLogout={handleLogout} children={
+                                <div className="header__link">
+                                    <p>{userData.email}</p>
+                                    <button type="button" onClick={handleLogout} className="link" style={{ textDecoration: 'none' }}>Выйти</button>
+                                </div>
+                            }/>
                             <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
                             <Footer />
                             <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
@@ -225,7 +229,7 @@ export default function App() {
                             {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
                         </Route>
                     </Switch>
-                </Router>
+                {/* </Router> */}
                 {/* </div> */}
             </CurrentUserContext.Provider>
             </div>
