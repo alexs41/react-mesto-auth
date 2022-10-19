@@ -7,7 +7,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
-import { BrowserRouter as Router, Route, Switch, Link, Redirect, useHistory } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from "react-router-dom";
 import ProtectedRoute from './ProtectedRoute';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Login from './Login';
@@ -16,7 +16,6 @@ import InfoTooltip from './InfoTooltip.js'
 
 import React, { useState, useEffect } from 'react';
 import Register from './Register';
-// import InfoTooltip from './InfoTooltip'
 import successIcon from '../images/success-icon.svg';
 import failIcon from '../images/fail-icon.svg'
 
@@ -237,8 +236,6 @@ export default function App() {
         <div className="App">
             <div className="root">
             <CurrentUserContext.Provider value={currentUser}>
-                {/* <div className="root"> */}
-                {/* <Router> */}
                     <Switch>
                         <Route path="/sign-in">
                             <Login onLogin={handleLogin} />
@@ -267,15 +264,10 @@ export default function App() {
                         <Route>
                             {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
                         </Route>
-                        
-                        {/* isOpen={isInfoTooltipOpen}  */}
                     </Switch>
                     <InfoTooltip infoTooltipOpen={infoTooltipOpen} isOpen={isInfoTooltipOpen} onClose={closeAllPopups} iconPath={registerPopup.iconPath} infoText={registerPopup.infoText} />
-                {/* </Router> */}
-                {/* </div> */}
             </CurrentUserContext.Provider>
             </div>
-            
         </div>
     );
 }

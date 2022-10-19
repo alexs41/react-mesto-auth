@@ -1,15 +1,11 @@
 import React from 'react';
 import Popup from './Popup';
-import successIcon from '../images/success-icon.svg';
-import failIcon from '../images/fail-icon.svg'
 
 export default function InfoTooltip (props) {
-    // const currentUser = React.useContext(CurrentUserContext);
     const { isOpen, onClose, iconPath, infoText } = props;
     
     return (
         <>
-            {/* <CurrentUserContext.Provider value={currentUser}> */}
             <Popup name="info-tool-tip" isOpen={isOpen} onClose={onClose} children={
                 <>
                     <form className="form info-tool-tip">
@@ -22,9 +18,6 @@ export default function InfoTooltip (props) {
                     
                 </>
             } />
-            {/* </CurrentUserContext.Provider> */}
         </>
-            
-        
     );
 }

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-// import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 const Form = (props) => {
-    // const currentUser = React.useContext(CurrentUserContext);
     const { formClassName,  formHeader, sumbitButtonText, onRegister1 } = props;
     const [state, setState] = useState({
         email: '',
@@ -32,7 +30,6 @@ const Form = (props) => {
       }
     return (
         <div className="login">
-            {/* <CurrentUserContext.Provider value={currentUser}> */}
             <form className={`form ${formClassName}`} onSubmit={handleSubmit}>
                 <h3 className="form__header form__header_login">{formHeader}</h3>
                 <input id='email' type="email" name='email' className="form__input form__input_login" placeholder="Email" onChange={handleChange} value={state.email} required minLength="2" maxLength="40" />
@@ -41,7 +38,6 @@ const Form = (props) => {
                 <span className="form__input-error"></span>
                 <button className="form__submit-button form__submit-button_login" type="submit">{sumbitButtonText}</button>
             </form>
-            {/* </CurrentUserContext.Provider> */}
         </div>
     );
 }

@@ -33,5 +33,5 @@ export default function Main(props) {
             ) : null}
         </main>
     );
-  }
+}
 
