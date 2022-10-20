@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PopupWithForm from './PopupWithForm.js';
 
 export default function EditAvatarPopup (props) {
@@ -11,8 +11,11 @@ export default function EditAvatarPopup (props) {
         onUpdateAvatar({
           avatar: avatarLinkRef.current.value, /* Значение инпута, полученное с помощью рефа */
         });
-        avatarLinkRef.current.value = '';
-      }
+    }
+
+    useEffect(() => {
+        if (isOpen) avatarLinkRef.current.value = '';
+      }, [isOpen]);
 
     return (
         <PopupWithForm title='Обновить аватар' name='editAvatar' isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} children={

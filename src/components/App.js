@@ -7,18 +7,16 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
-import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from "react-router-dom";
+import { Route, Switch, Redirect, useHistory, useLocation, Link } from "react-router-dom";
 import ProtectedRoute from './ProtectedRoute';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Login from './Login';
 import * as auth from '../auth.js';
 import InfoTooltip from './InfoTooltip.js'
-
 import React, { useState, useEffect } from 'react';
 import Register from './Register';
 import successIcon from '../images/success-icon.svg';
 import failIcon from '../images/fail-icon.svg'
-
 
 export default function App() {
     const successText = 'Вы успешно зарегистрировались!';
@@ -44,23 +42,25 @@ export default function App() {
     });
 
     const history = useHistory();
+    const location = useLocation();
 
     useEffect(() => {
-        tokenCheck();
+        checkToken();
       }, []);
     
-    const handleLogin = (password, email) => {
-        return auth.authorize(password, email)
-                .then((data) => {
-                if (!data.token) throw new Error('Missing token');
-                localStorage.setItem('token', data.token);
-                debugger;
-                setLoggedIn(true);
-                setUserData({
-                    email: email
-                })
-                history.push(`/`);
+    const handleLogin = async (password, email) => {
+        try {
+            const data = await auth.authorize(password, email);
+            if (!data.token) throw new Error('Missing token');
+            localStorage.setItem('token', data.token);
+            setLoggedIn(true);
+            setUserData({
+                email: email
             });
+            history.push(`/`);
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
     };
     
     const handleLogout = () => {
@@ -69,18 +69,19 @@ export default function App() {
         history.push('/sign-in');
     }
     
-    const tokenCheck = () => {
+    const checkToken = async () => {
         const token = localStorage.getItem('token');
-    
         if (!token) return;
-    
-        auth.getContent(token).then(({ data }) => {
-          setLoggedIn(true);
-          setUserData({
-            email: data.email
-          })
-          history.push('/');
-        });
+        try {
+            const { data } = await auth.getContent(token);
+            setLoggedIn(true);
+            setUserData({
+                email: data.email
+            });
+            history.push('/');
+        } catch (err) {
+            console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
+        }
     };
     //---------------------------------- ПР12 -----------------------------
 
@@ -88,7 +89,6 @@ export default function App() {
     const handleEditProfileClick = () => setEditProfilePopupState(true);
     const handleAddPlaceClick = () => setAddPlacePopupState(true);
     const infoTooltipOpen = () => {
-        debugger;
         setIsInfoTooltipOpen(true);
     }
 
@@ -101,10 +101,8 @@ export default function App() {
         setEditAvatarPopupState(false);
         setEditProfilePopupState(false);
         setAddPlacePopupState(false);
-
         setImagePopupState(false);
         setSelectedCard(null);
-
         setIsInfoTooltipOpen(false);
     }
     
@@ -113,6 +111,8 @@ export default function App() {
     async function renderInitialCards() {
         try {
             let initialCards = await api.getInitialCards();
+            // при объявлении initialCards как const карточки не отрисовываются
+            // и выдает ошибку Ошибка! TypeError: Assignment to constant variable.
             initialCards = initialCards.map((card) => ({
             link: card.link,
             alt: card.name,
@@ -138,7 +138,7 @@ export default function App() {
         }
     }
     useEffect(() => {
-        (async () => {
+        if (loggedIn) {(async () => {
             try {
                 await Promise.all([
                     renderInitialCards(),
@@ -147,8 +147,8 @@ export default function App() {
             } catch (err) {
                 console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
             }
-        })();
-    }, []);
+        })();}
+    }, [loggedIn]);
 
     async function handleCardLike(card) {
         // Снова проверяем, есть ли уже лайк на этой карточке
@@ -201,25 +201,20 @@ export default function App() {
         } 
     }
     async function handleRegister (email, password) {
-        try { 
-            debugger;
+        try {
             const data = await auth.register(email, password);
             history.push('/sign-in');
-            debugger;
             if (data.data._id) {
-                debugger;
                 setRegisterPopup({
                     iconPath: successIcon,
                     infoText: successText
                 });
             } else {
-                debugger;
                 setRegisterPopup({
                     iconPath: failIcon,
                     infoText: failText
                 });
             }
-            console.log(password, email);
         } catch (err) {
             setRegisterPopup({
                 iconPath: failIcon,
@@ -231,11 +226,38 @@ export default function App() {
             infoTooltipOpen();
         }
     };
+    const [headerLoginInfo, setHeaderLoginInfo] = useState('');
+    function headerLoginInfoUpdate() {
+        if (location.pathname === '/') {
+            // main
+            setHeaderLoginInfo(
+                <div className="header-login-info">
+                    <p className="header-login-info__email">{userData.email}</p>
+                    <button className="header-login-info__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }}>Выйти</button>
+                </div>
+            );
+        } else if (location.pathname === '/sign-in') {
+            // login
+            setHeaderLoginInfo(
+                <Link className="header__link link" to="/sign-up" style={{ textDecoration: 'none' }}>Регистрация</Link>
+            );
+        } else if (location.pathname === '/sign-up') {
+            // register
+            setHeaderLoginInfo(
+                <Link to="/sign-in" className="header__link link" style={{ textDecoration: 'none' }}>Войти</Link>
+            );
+        }
+   }
+
+    useEffect(() => {
+        headerLoginInfoUpdate()
+    }, [location.pathname]);
 
     return (
         <div className="App">
             <div className="root">
             <CurrentUserContext.Provider value={currentUser}>
+                    <Header onLogout={handleLogout} children={headerLoginInfo} />
                     <Switch>
                         <Route path="/sign-in">
                             <Login onLogin={handleLogin} />
@@ -244,12 +266,6 @@ export default function App() {
                             <Register onRegister={handleRegister} />
                         </Route>
                         <ProtectedRoute exact path="/" loggedIn={loggedIn}>
-                            <Header onLogout={handleLogout} children={
-                                <div className="header-login-info">
-                                    <p className="header-login-info__email">{userData.email}</p>
-                                    <button className="header-login-info__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }}>Выйти</button>
-                                </div>
-                            }/>
                             <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
                             <Footer />
                             <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />

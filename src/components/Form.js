@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 
 const Form = (props) => {
     const { formClassName,  formHeader, sumbitButtonText, onRegister1 } = props;
+
     const [state, setState] = useState({
         email: '',
         password: '',
         message: ''
-      });
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -42,4 +43,4 @@ const Form = (props) => {
     );
 }
 
-export default Form;
+// export default Form;

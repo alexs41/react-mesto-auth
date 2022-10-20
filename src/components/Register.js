@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Header from './Header';
 import { Link, withRouter } from 'react-router-dom';
 
 const Register = (props) => {
@@ -9,7 +8,7 @@ const Register = (props) => {
         email: '',
         password: '',
         message: ''
-      });
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,9 +31,6 @@ const Register = (props) => {
 
     return (
         <>
-            <Header children={
-                    <Link to="/sign-in" className="header__link link" style={{ textDecoration: 'none' }}>Войти</Link>
-            } />
             <div className="login">
                 <form className="form form_login" onSubmit={handleSubmit}>
                     <h3 className="form__header form__header_login">Регистрация</h3>

@@ -20,7 +20,7 @@ export default function AddPlacePopup (props) {
     return (
         <PopupWithForm title='Новое место' name='addPlace' isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} children={
             <>
-                <input ref={cardHeaderRef} id="element-name-input" type="text" name="name" className="form__input form__input_element-name" placeholder="Название" required minLength="2" maxLength="40" />
+                <input ref={cardHeaderRef} id="element-name-input" type="text" name="name" className="form__input form__input_element-name" placeholder="Название" required minLength="2" maxLength="30" />
                 <span className="element-name-input-error form__input-error"></span>
                 <input ref={cardLinkRef} id="picture-link-input" type="url" name="link" className="form__input form__input_picture-link" placeholder="Ссылка на картинку" required />
                 <span className="picture-link-input-error form__input-error"></span>

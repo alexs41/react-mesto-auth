@@ -16,10 +16,15 @@ export default function PopupWithForm(props)  {
     }
 
     useEffect(() => {
+        // if (isOpen === true) {
+        //     document.addEventListener("keydown", handleEscClose);
+        //     return () => document.removeEventListener("keydown", handleEscClose);
+        // };
         if (isOpen === true) {
             document.addEventListener("keydown", handleEscClose);
-            return () => document.removeEventListener("keydown", handleEscClose);
-        };
+        } else {
+            document.removeEventListener("keydown", handleEscClose);
+        }
     }, [isOpen, handleEscClose]);
 
     return (

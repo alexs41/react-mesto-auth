@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import Header from './Header';
+import { withRouter } from 'react-router-dom';
 
 const Login = ({ onLogin }) => {
     const [state, setState] = useState({
@@ -35,9 +34,6 @@ const Login = ({ onLogin }) => {
 
     return (
         <>
-            <Header children={
-                    <Link className="header__link link" to="/sign-up" style={{ textDecoration: 'none' }}>Регистрация</Link>
-            } />
             <div className="login">
                 <form className="form form_login" onSubmit={handleSubmit}>
                     <h3 className="form__header form__header_login">Вход</h3>
@@ -48,7 +44,7 @@ const Login = ({ onLogin }) => {
                     <button className="form__submit-button form__submit-button_login" type="submit">Войти</button>
                     <p className='form__footnote'></p>
                 </form>
-        </div>
+            </div>
         </>
     );
 }

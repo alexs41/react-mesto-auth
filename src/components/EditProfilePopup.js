@@ -13,8 +13,10 @@ export default function EditProfilePopup (props) {
     // После загрузки текущего пользователя из API
     // его данные будут использованы в управляемых компонентах.
     React.useEffect(() => {
-        setName(currentUser.name);
-        setDescription(currentUser.about);
+        if (isOpen) {
+            setName(currentUser.name);
+            setDescription(currentUser.about);
+        }
     }, [currentUser, isOpen]);
 
     // Обработчик изменения инпута обновляет стейт
@@ -28,7 +30,6 @@ export default function EditProfilePopup (props) {
     function handleSubmit(e) {
         // Запрещаем браузеру переходить по адресу формы
         e.preventDefault();
-      
         // Передаём значения управляемых компонентов во внешний обработчик
         onUpdateUser({
           name,
