@@ -15,7 +15,6 @@ export default function InfoTooltip (props) {
                         <h3 className="info-tool-tip__message">{infoText}</h3>
                         <button className="popup__close-button" type="button" onClick={onClose}></button>
                     </form>
-                    
                 </>
             } />
         </>

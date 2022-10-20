@@ -16,10 +16,6 @@ export default function Popup(props)  {
     }
 
     useEffect(() => {
-        // if (isOpen === true) {
-        //     document.addEventListener("keydown", handleEscClose);
-        //     return () => document.removeEventListener("keydown", handleEscClose);
-        // };
         if (isOpen === true) {
             document.addEventListener("keydown", handleEscClose);
         } else {
@@ -30,7 +26,7 @@ export default function Popup(props)  {
     return (
         <div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`} onClick={handleBlackAreaClosePopup}>
             <div className="popup__container">
-                    {children}
+                {children}
             </div>
         </div>
     );

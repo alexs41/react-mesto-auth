@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect} from 'react';
 import PopupWithForm from './PopupWithForm.js';
 
 export default function AddPlacePopup (props) {
@@ -13,9 +13,14 @@ export default function AddPlacePopup (props) {
             name: cardHeaderRef.current.value,/* Значение инпута, полученное с помощью рефа */
             link: cardLinkRef.current.value,
         });
-        cardHeaderRef.current.value = '';
-        cardLinkRef.current.value = '';
     }
+
+    useEffect(() => {
+        if (isOpen) {
+            cardHeaderRef.current.value = '';
+            cardLinkRef.current.value = '';
+        }
+      }, [isOpen]);
 
     return (
         <PopupWithForm title='Новое место' name='addPlace' isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} children={
