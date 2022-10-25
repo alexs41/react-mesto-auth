@@ -9,3 +9,9 @@
       margin-bottom: -8px;
     }
   }
+  @media screen and (max-width: 499px) {
+    .header-login-info {
+        visibility: hidden;
+        display: none;
+    }
+}

@@ -1,4 +1,13 @@
 .info-tool-tip {
     padding: 60px 36px;
     max-width: 358px;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 468px) {
+    .info-tool-tip {
+        padding: 50px 18px;
+        max-width: calc(100vw - 40px);
+        max-height: 308px;
+    }
 }

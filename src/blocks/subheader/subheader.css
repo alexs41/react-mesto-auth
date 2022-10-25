@@ -1,0 +1,9 @@
+.subheader {
+    visibility: visible;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #545454;
+    padding: 30px;
+}

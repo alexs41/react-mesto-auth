@@ -16,7 +16,10 @@ import InfoTooltip from './InfoTooltip.js'
 import React, { useState, useEffect } from 'react';
 import Register from './Register';
 import successIcon from '../images/success-icon.svg';
-import failIcon from '../images/fail-icon.svg'
+import failIcon from '../images/fail-icon.svg';
+
+import bugerIcon from '../images/burger.svg';
+import closeIcon from '../images/close-icon.svg'
 
 export default function App() {
     const successText = 'Вы успешно зарегистрировались!';
@@ -227,14 +230,52 @@ export default function App() {
         }
     };
     const [headerLoginInfo, setHeaderLoginInfo] = useState('');
+    const [preheader, setPreheader] = useState('');
+    const [isPreheaderVisible, setIsPreheaderVisible] = useState(false);
+
+    function togglePreheader() {
+        // if (!isPreheaderVisible) {
+        //     setIsPreheaderVisible(true);
+        //     console.log('isPreheaderVisible True = ' + isPreheaderVisible);
+        // } else {
+        //     setIsPreheaderVisible(false);
+        //     console.log('isPreheaderVisible False = ' + isPreheaderVisible);
+        // }
+        // console.log('isPreheaderVisible Total = ' + isPreheaderVisible);
+        setIsPreheaderVisible((state) => {
+            if (state) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+    }
+
+    function preheaderUpdate() {
+        if (location.pathname === '/' || location.pathname === '') {
+            // main
+            setPreheader(
+                  <div className="subheader" style={{display: isPreheaderVisible ? 'flex' : 'none'}}>
+                    <p className="header-login-info__email subheader__email">{userData.email}</p>
+                    <button className="header-login-info__button subheader__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }} >Выйти</button>
+                </div>
+            );
+        } else {
+            setPreheader('');
+        }
+    }
+
     function headerLoginInfoUpdate() {
         if (location.pathname === '/') {
             // main
             setHeaderLoginInfo(
-                <div className="header-login-info">
-                    <p className="header-login-info__email">{userData.email}</p>
-                    <button className="header-login-info__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }}>Выйти</button>
-                </div>
+                <>  
+                    <div className="header-login-info">
+                        <p className="header-login-info__email">{userData.email}</p>
+                        <button className="header-login-info__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }}>Выйти</button>
+                    </div>
+                    <button className="header__burger" type="button" onClick={togglePreheader} style={{ backgroundImage: isPreheaderVisible ? `url(${closeIcon})` : `url(${bugerIcon})` }}></button>
+                </>
             );
         } else if (location.pathname === '/sign-in') {
             // login
@@ -250,14 +291,15 @@ export default function App() {
    }
 
     useEffect(() => {
-        headerLoginInfoUpdate()
-    }, [location.pathname]);
+        headerLoginInfoUpdate();
+        preheaderUpdate();
+    }, [location.pathname, isPreheaderVisible]);
 
     return (
         <div className="App">
             <div className="root">
             <CurrentUserContext.Provider value={currentUser}>
-                    <Header onLogout={handleLogout} children={headerLoginInfo} />
+                    <Header onLogout={handleLogout} children={headerLoginInfo} childrenPreheader={preheader} />
                     <Switch>
                         <Route path="/sign-in">
                             <Login onLogin={handleLogin} />
