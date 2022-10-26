@@ -6,6 +6,7 @@ import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import ConfirmDeletePopup from './ConfirmDeletePopup';
 import { api } from '../utils/api';
 import { Route, Switch, Redirect, useHistory, useLocation, Link } from "react-router-dom";
 import ProtectedRoute from './ProtectedRoute';
@@ -29,6 +30,10 @@ export default function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupState] = useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupState] = useState(false);
     const [isImagePopupOpen, setImagePopupState] = useState(false);
+    const [isConfirmDeletePopupOpen, setConfirmDeletePopupOpen] = useState(false);
+
+    const [cardForDelete, setCardForDelete] = useState({});
+
     const [selectedCard, setSelectedCard] = useState(null);
     const [currentUser, setCurrentUser] = useState({});
     const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
@@ -91,6 +96,11 @@ export default function App() {
     const handleEditAvatarClick = () => setEditAvatarPopupState(true);
     const handleEditProfileClick = () => setEditProfilePopupState(true);
     const handleAddPlaceClick = () => setAddPlacePopupState(true);
+    const handleDeleteButtonClick = (card) => {
+        setCardForDelete(card);
+        setConfirmDeletePopupOpen(true);
+    }
+
     const infoTooltipOpen = () => {
         setIsInfoTooltipOpen(true);
     }
@@ -107,6 +117,7 @@ export default function App() {
         setImagePopupState(false);
         setSelectedCard(null);
         setIsInfoTooltipOpen(false);
+        setConfirmDeletePopupOpen(false);
     }
     
     const [cardsArray, setCardsArray] = useState([]);
@@ -169,6 +180,7 @@ export default function App() {
         try {
             await api.deleteCard(card);
             setCardsArray(cardsArray.filter(item => item._id !==card._id));
+            closeAllPopups();
         } catch (err) {
             console.log(`Ошибка! ${err}`); // выведем ошибку в консоль
         }
@@ -234,14 +246,6 @@ export default function App() {
     const [isPreheaderVisible, setIsPreheaderVisible] = useState(false);
 
     function togglePreheader() {
-        // if (!isPreheaderVisible) {
-        //     setIsPreheaderVisible(true);
-        //     console.log('isPreheaderVisible True = ' + isPreheaderVisible);
-        // } else {
-        //     setIsPreheaderVisible(false);
-        //     console.log('isPreheaderVisible False = ' + isPreheaderVisible);
-        // }
-        // console.log('isPreheaderVisible Total = ' + isPreheaderVisible);
         setIsPreheaderVisible((state) => {
             if (state) {
                 return false;
@@ -308,16 +312,23 @@ export default function App() {
                             <Register onRegister={handleRegister} />
                         </Route>
                         <ProtectedRoute exact path="/" loggedIn={loggedIn}>
-                            <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
+                            <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} cardsArray={cardsArray} onCardLike={handleCardLike} onCardDelete={handleDeleteButtonClick} />
+                            {/* onCardDelete={handleCardDelete} */}
                             <Footer />
                             <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
                             <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
                             <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
                             
-                            <PopupWithForm title='Вы уверены?' name='confirm' /*isOpen={}*/ onClose={closeAllPopups} children={ <>
-                                    <button className="form__submit-button form__submit-button_confirm" type="submit">Да</button>
-                                </>} />
                             <ImagePopup name='imagePopup' card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
+                            <ConfirmDeletePopup card={cardForDelete} isOpen={isConfirmDeletePopupOpen} onClose={closeAllPopups} onDeleteCard={handleCardDelete} />
+
+                            {/* <PopupWithForm title='Обновить аватар' name='editAvatar' isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} children={
+                                    <>
+                                        <input ref={avatarLinkRef} id="avatar-link-input" type="url" name="avatar" className="form__input form__input_avatar-link" placeholder="Ссылка на новый аватар" required />
+                                        <span className="avatar-link-input-error form__input-error"></span>
+                                        <button className="form__submit-button form__submit-button_edit-avatar" type="submit">Сохранить</button>
+                                    </>
+                                } /> */}
                         </ProtectedRoute>
                         <Route>
                             {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
