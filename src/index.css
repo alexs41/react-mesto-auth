@@ -3,6 +3,7 @@
 @import url(./blocks/root/root.css);
 
 @import url(./blocks/subheader/subheader.css);
+@import url(./blocks/subheader/__email/subheader__email.css);
 
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
