@@ -2,7 +2,6 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
-import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
@@ -255,23 +254,29 @@ export default function App() {
         });
     }
 
-    function preheaderUpdate() {
+    // function preheaderUpdate() {
+    //     if (location.pathname === '/' || location.pathname === '') {
+    //         // main
+    //         setPreheader(
+    //               <div className="subheader" style={{display: isPreheaderVisible  ? 'flex' : 'none'}}>
+    //                 <p className="header-login-info__email subheader__email">{userData.email}</p>
+    //                 <button className="header-login-info__button subheader__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }} >Выйти</button>
+    //             </div>
+    //         );
+    //     } else {
+    //         setPreheader('');
+    //     }
+    // }
+
+    function headerLoginInfoUpdate() {
         if (location.pathname === '/' || location.pathname === '') {
             // main
             setPreheader(
-                  <div className="subheader" style={{display: isPreheaderVisible ? 'flex' : 'none'}}>
-                    <p className="header-login-info__email subheader__email">{userData.email}</p>
-                    <button className="header-login-info__button subheader__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }} >Выйти</button>
-                </div>
+                <div className="subheader" style={{display: isPreheaderVisible  ? 'flex' : 'none'}}>
+                  <p className="header-login-info__email subheader__email">{userData.email}</p>
+                  <button className="header-login-info__button subheader__button" type="button" onClick={handleLogout} style={{ textDecoration: 'none' }} >Выйти</button>
+              </div>
             );
-        } else {
-            setPreheader('');
-        }
-    }
-
-    function headerLoginInfoUpdate() {
-        if (location.pathname === '/') {
-            // main
             setHeaderLoginInfo(
                 <>  
                     <div className="header-login-info">
@@ -283,11 +288,13 @@ export default function App() {
             );
         } else if (location.pathname === '/sign-in') {
             // login
+            setPreheader('');
             setHeaderLoginInfo(
                 <Link className="header__link link" to="/sign-up" style={{ textDecoration: 'none' }}>Регистрация</Link>
             );
         } else if (location.pathname === '/sign-up') {
             // register
+            setPreheader('');
             setHeaderLoginInfo(
                 <Link to="/sign-in" className="header__link link" style={{ textDecoration: 'none' }}>Войти</Link>
             );
@@ -296,8 +303,8 @@ export default function App() {
 
     useEffect(() => {
         headerLoginInfoUpdate();
-        preheaderUpdate();
-    }, [location.pathname, isPreheaderVisible]);
+        // preheaderUpdate();
+    }, [location.pathname, isPreheaderVisible, window.innerWidth]);
 
     return (
         <div className="App">
