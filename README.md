@@ -13,6 +13,6 @@ test
 
 * JSX
 
-[ссылка на проект react-mesto-auth](https://alexs41.github.io/ "Mesto (auth)")
+[ссылка на проект react-mesto-auth](https://github.com/alexs41/react-mesto-auth/deployments/activity_log?environment=github-pages "Mesto (auth)")
 
 © 2022. **Кайгородов Александр**
